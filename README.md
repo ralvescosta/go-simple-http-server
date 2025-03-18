@@ -1,1 +1,1 @@
-# go-simple-http-server
+# go Simple HTTP Server
