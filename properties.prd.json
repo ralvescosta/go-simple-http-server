@@ -3,7 +3,7 @@
   "appName": "go-simples-http-server",
   "logLevel": "debug",
   "logLevelHook": false,
-  "logTimezoneHook": false,
+  "logTimezoneHook": true,
   "timezone": "America/Sao_Paulo",
 
   "host": "0.0.0.0",

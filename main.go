@@ -1,8 +1,12 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -35,8 +39,8 @@ func main() {
 	server := &http.Server{
 		Addr:         addr,
 		ReadTimeout:  10 * time.Second,
-		WriteTimeout: time.Second,
-		IdleTimeout:  time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  10 * time.Second,
 		Handler:      r,
 	}
 
@@ -46,6 +50,31 @@ func main() {
 	authorizationController := controllers.NewAuthorizationController(authorizationService)
 	routes.RegisterAuthorizationRoutes(r, authorizationController)
 
-	logrus.Infof("Stating HTTP server: %s", addr)
-	server.ListenAndServe()
+	go func() {
+		logrus.Infof("Starting HTTP server: %s", addr)
+		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			logrus.Fatalf("Could not listen on %s: %v", addr, err)
+		}
+	}()
+
+	//=================================
+	//===== Gracefully Shutdown =======
+	//=================================
+	signalChan := make(chan os.Signal, 1)
+	signal.Notify(signalChan, syscall.SIGINT, syscall.SIGTERM)
+
+	// Wait for interrupt signal
+	<-signalChan
+	logrus.Info("Shutting down server...")
+
+	// Create a context with a timeout for the shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	// Shutdown the server gracefully
+	if err := server.Shutdown(ctx); err != nil {
+		logrus.Fatalf("Server forced to shutdown: %v", err)
+	}
+
+	logrus.Info("Server exiting")
 }
