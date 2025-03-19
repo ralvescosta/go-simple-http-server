@@ -15,7 +15,7 @@ import (
 
 	"githib.com/ralvescosta/go-simple-http-server/internal/services"
 	"githib.com/ralvescosta/go-simple-http-server/pkg/configs"
-	"githib.com/ralvescosta/go-simple-http-server/pkg/controllers"
+	"githib.com/ralvescosta/go-simple-http-server/pkg/controllers/financial"
 	"githib.com/ralvescosta/go-simple-http-server/pkg/routes"
 )
 
@@ -47,8 +47,18 @@ func main() {
 	logrus.Info("instantiating services, controllers and routers...")
 
 	authorizationService := services.NewAuthorizationService()
-	authorizationController := controllers.NewAuthorizationController(authorizationService)
-	routes.RegisterAuthorizationRoutes(r, authorizationController)
+	preAuthService := services.NewPreAuthorizationService()
+	confirmationService := services.NewConfirmationService()
+	cancellationService := services.NewCancellationService()
+	reversalService := services.NewReversalService()
+
+	authorizationController := financial.NewAuthorizationController(authorizationService)
+	preAuthController := financial.NewPreAuthorizationController(preAuthService)
+	confirmationController := financial.NewConfirmationController(confirmationService)
+	cancellationController := financial.NewCancellationController(cancellationService)
+	reversalController := financial.NewReversalController(reversalService)
+
+	routes.RegisterFinancialRoutes(r, authorizationController, preAuthController, confirmationController, cancellationController, reversalController)
 
 	go func() {
 		logrus.Infof("Starting HTTP server: %s", addr)

@@ -8,7 +8,7 @@ import (
 
 type (
 	AuthorizationService interface {
-		Auth(ctx context.Context, req *models.AuthorizationRequest) (*models.AuthorizationResponse, error)
+		Process(ctx context.Context, req *models.AuthorizationRequest) (*models.AuthorizationResponse, error)
 	}
 
 	authorizationService struct{}
@@ -18,6 +18,6 @@ func NewAuthorizationService() AuthorizationService {
 	return &authorizationService{}
 }
 
-func (s *authorizationService) Auth(ctx context.Context, req *models.AuthorizationRequest) (*models.AuthorizationResponse, error) {
+func (s *authorizationService) Process(ctx context.Context, req *models.AuthorizationRequest) (*models.AuthorizationResponse, error) {
 	return nil, nil
 }

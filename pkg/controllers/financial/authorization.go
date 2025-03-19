@@ -1,4 +1,4 @@
-package controllers
+package financial
 
 import (
 	"encoding/json"
@@ -6,6 +6,7 @@ import (
 
 	"githib.com/ralvescosta/go-simple-http-server/internal/models"
 	"githib.com/ralvescosta/go-simple-http-server/internal/services"
+	"githib.com/ralvescosta/go-simple-http-server/pkg/controllers"
 )
 
 type (
@@ -22,25 +23,25 @@ func (c *AuthorizationController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.AuthorizationRequest
 
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		NewResponseBuilder(w).UnformattedBody().Build()
+		controllers.NewResponseBuilder(w).UnformattedBody().Build()
 		return
 	}
 
-	if validationErr := BodyValidator(&body); validationErr != nil {
-		NewResponseBuilder(w).InvalidBody().ErrMessage(validationErr.Message).Build()
+	if validationErr := controllers.BodyValidator(&body); validationErr != nil {
+		controllers.NewResponseBuilder(w).InvalidBody().ErrMessage(validationErr.Message).Build()
 		return
 	}
 
-	resp, err := c.service.Auth(r.Context(), &body)
+	resp, err := c.service.Process(r.Context(), &body)
 	if err != nil {
-		NewResponseBuilder(w).InternalError().ErrMessage(err.Error()).Build()
+		controllers.NewResponseBuilder(w).InternalError().ErrMessage(err.Error()).Build()
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	if err := json.NewEncoder(w).Encode(resp); err != nil {
-		NewResponseBuilder(w).InternalError().ErrMessage(err.Error()).Build()
+		controllers.NewResponseBuilder(w).InternalError().ErrMessage(err.Error()).Build()
 		return
 	}
 }
