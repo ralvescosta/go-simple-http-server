@@ -35,7 +35,7 @@ To get started with the Go Simple HTTP Server, follow these steps:
 
 ## Usage
 
-Once the server is running, you can access it at `http://localhost:8080`. You can customize the port and other configurations through environment variables.
+Once the server is running, you can access it at `http://localhost:3333`. You can customize the port and other configurations through environment variables.
 
 ## Project Structure
 
