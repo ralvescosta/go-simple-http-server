@@ -19,6 +19,16 @@ func NewConfirmationController(service services.ConfirmationService) *Confirmati
 	return &ConfirmationController{service}
 }
 
+// Post godoc
+// @Summary Process confirmation
+// @Description Process a payment confirmation request
+// @Tags financial
+// @Accept json
+// @Produce json
+// @Param body body models.ConfirmationRequest true "Confirmation request"
+// @Success 200 {object} models.ConfirmationResponse
+// @Failure 400 {object} controllers.HTTPResponse
+// @Failure 500 {object} controllers.HTTPResponse
 func (c *ConfirmationController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.ConfirmationRequest
 

@@ -1,8 +1,12 @@
 package routes
 
 import (
+	"net/http"
+
 	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/sirupsen/logrus"
+	httpSwagger "github.com/swaggo/http-swagger"
 
 	"githib.com/ralvescosta/go-simple-http-server/pkg/controllers/financial"
 )
@@ -15,6 +19,10 @@ func RegisterFinancialRoutes(
 	cancellation *financial.CancellationController,
 	reversal *financial.ReversalController,
 ) {
+	logrus.Debug("GET /swagger/*")
+	r.Mount("/swagger/", httpSwagger.WrapHandler)
+	r.Use(middleware.Heartbeat("/ping"))
+
 	logrus.Debug("POST /v1/payments/authorization")
 	r.Post("/v1/payments/authorization", auth.Post)
 

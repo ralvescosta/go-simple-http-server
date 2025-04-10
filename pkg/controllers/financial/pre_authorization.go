@@ -19,6 +19,16 @@ func NewPreAuthorizationController(service services.PreAuthorizationService) *Pr
 	return &PreAuthorizationController{service}
 }
 
+// Post godoc
+// @Summary Process pre-authorization
+// @Description Process a payment pre-authorization request
+// @Tags financial
+// @Accept json
+// @Produce json
+// @Param body body models.PreAuthorizationRequest true "Pre-authorization request"
+// @Success 200 {object} models.PreAuthorizationResponse
+// @Failure 400 {object} controllers.HTTPResponse
+// @Failure 500 {object} controllers.HTTPResponse
 func (c *PreAuthorizationController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.PreAuthorizationRequest
 

@@ -19,6 +19,16 @@ func NewReversalController(service services.ReversalService) *ReversalController
 	return &ReversalController{service}
 }
 
+// Post godoc
+// @Summary Process reversal
+// @Description Process a payment reversal request
+// @Tags financial
+// @Accept json
+// @Produce json
+// @Param body body models.ReversalRequest true "Reversal request"
+// @Success 200 {object} models.ReversalResponse
+// @Failure 400 {object} controllers.HTTPResponse
+// @Failure 500 {object} controllers.HTTPResponse
 func (c *ReversalController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.ReversalRequest
 

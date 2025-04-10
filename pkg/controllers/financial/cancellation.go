@@ -19,6 +19,16 @@ func NewCancellationController(service services.CancellactionService) *Cancellat
 	return &CancellationController{service}
 }
 
+// Post godoc
+// @Summary Process cancellation
+// @Description Process a payment cancellation request
+// @Tags financial
+// @Accept json
+// @Produce json
+// @Param body body models.CancellationRequest true "Cancellation request"
+// @Success 200 {object} models.CancellationResponse
+// @Failure 400 {object} controllers.HTTPResponse
+// @Failure 500 {object} controllers.HTTPResponse
 func (c *CancellationController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.CancellationRequest
 

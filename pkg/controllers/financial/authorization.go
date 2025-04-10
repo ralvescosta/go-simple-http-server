@@ -19,6 +19,16 @@ func NewAuthorizationController(service services.AuthorizationService) *Authoriz
 	return &AuthorizationController{service}
 }
 
+// Post godoc
+// @Summary Process authorization
+// @Description Process a payment authorization request
+// @Tags financial
+// @Accept json
+// @Produce json
+// @Param body body models.AuthorizationRequest true "Authorization request"
+// @Success 200 {object} models.AuthorizationResponse
+// @Failure 400 {object} controllers.HTTPResponse
+// @Failure 500 {object} controllers.HTTPResponse
 func (c *AuthorizationController) Post(w http.ResponseWriter, r *http.Request) {
 	var body models.AuthorizationRequest
 
